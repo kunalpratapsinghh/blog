@@ -19,7 +19,7 @@ router.post("/login", async (req, res) => {
           email: user.email,
         },
         "secretkey",
-        { expiresIn: "1 hr" }
+        { expiresIn: "15 m" }
       );
       const Refreshtoken = jwt.sign(
         {
@@ -64,11 +64,8 @@ router.post("/refresh", async(req, res) => {
     if(verification){
       delete verification.iat;
 			delete verification.exp;
-      const decode=jwt.decode(refreshtoken)
-      delete decode.iat;
-			delete decode.exp;
-      const primary = jwt.sign(decode, "secretkey",{expiresIn: "1 hr"});
-      res.send(primary);
+      const primary = jwt.sign(verification, "secretkey",{expiresIn: "1 hr"});
+      res.send({Token:primary});
     }
     else{
       res.send("login again")
@@ -79,5 +76,20 @@ router.post("/refresh", async(req, res) => {
     //tell frontend to login again
   }
 });
+
+
+
+router.get("/",async(req,res)=>{
+  const token=req.headers["authorization"]
+  
+  try {
+    const validity=jwt.verify(token,"secretkey");
+    if(validity){
+     res.send("Authentication")
+    }
+  } catch (error) {
+    return res.send("not authorized")
+  }
+})
 
 module.exports = router;

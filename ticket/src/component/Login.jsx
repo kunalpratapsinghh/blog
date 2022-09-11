@@ -29,7 +29,6 @@ const Login = () => {
       axios
         .post("http://localhost:8080/login", logindata)
         .then((res) => {
-          console.log(res.data)
           if(res.data.token){
             localStorage.setItem("token",JSON.stringify(res.data.token))
             setShow(!show)
