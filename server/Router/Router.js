@@ -19,7 +19,7 @@ router.post("/login", async (req, res) => {
           email: user.email,
         },
         "secretkey",
-        { expiresIn: "15 m" }
+        { expiresIn: "24 hr" }
       );
       const Refreshtoken = jwt.sign(
         {
@@ -77,19 +77,15 @@ router.post("/refresh", async(req, res) => {
   }
 });
 
-
-
-router.get("/",async(req,res)=>{
-  const token=req.headers["authorization"]
-  
+router.get("/", async(req,res)=>{
+  const token=req.headers["authorization"];
   try {
     const validity=jwt.verify(token,"secretkey");
     if(validity){
-     res.send("Authentication")
+     return res.send("Authenticated")
     }
   } catch (error) {
     return res.send("not authorized")
   }
 })
-
 module.exports = router;
