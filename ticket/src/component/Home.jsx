@@ -1,13 +1,11 @@
 import { Box, Heading } from '@chakra-ui/react'
 import axios from 'axios'
 import { useState } from 'react'
-import { useEffect } from 'react'
 import Navbar from './Navbar'
 
 const Home = () => {
   const token=JSON.parse(localStorage.getItem("token"))||"";
-
-  const [data,setData]=useState("")
+  const [authorize,setAutorize] =useState("")
   const homepage=()=>{
     try {
       axios.get("http://localhost:8080/",{headers: {
@@ -15,7 +13,7 @@ const Home = () => {
         "Authorization": token 
       }})
       .then((res) => {
-        console.log(res)
+        setAutorize(res.data)
       })
      
     } catch (error) {
@@ -27,7 +25,7 @@ const Home = () => {
     <Box>
       <Navbar/>
       <Box>Home</Box>
-      <Heading>{data}</Heading>
+      <Heading>{authorize}</Heading>
     </Box>
   )
 }
